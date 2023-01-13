@@ -8,9 +8,15 @@ def index(request):
     return render(request, 'main/index.html')
 
 
-def other_page(request, page):
+def other_page(request, page: str):
+    parts_url = ['main/', '.html']
     try:
-        template = get_template('main/' + page + '.html')
+        template = get_template(page.join(parts_url))
     except TemplateDoesNotExist:
         raise Http404
     return HttpResponse(template.render(request=request))
+
+
+"""
+typing hunting - go!!!
+"""
