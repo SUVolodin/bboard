@@ -15,8 +15,3 @@ def other_page(request, page: str):
     except TemplateDoesNotExist:
         raise Http404
     return HttpResponse(template.render(request=request))
-
-
-"""
-typing hunting - go!!!
-"""
