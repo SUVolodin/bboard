@@ -3,6 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+AUTH_USER_MODEL = 'main.AdvUser'
+
 SECRET_KEY = 'django-insecure-y!%ad$1%6@q_$%bw-v-uq@7)ywe6+fji&2ubf6)o-1x908di-l'
 
 DEBUG = True
