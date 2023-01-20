@@ -1,7 +1,7 @@
 from .views import DeleteUserView
 from .views import ChangeUserInfoView
 from .views import other_page
-from .views import user_activate
+from .views import user_activate, by_rubric
 from django.urls import path
 
 from .views import BBPasswordChangeView
@@ -18,10 +18,11 @@ urlpatterns = [
     path('accounts/register/', RegisterUserView.as_view(), name='register'),
     path('accounts/logout/', BBLogoutView.as_view(), name='logout'),
     path('account/password/change', BBPasswordChangeView.as_view(), name='password_change'),
-    path('accounts/profile/delete/',DeleteUserView.as_view(), name='profile_delete'),
+    path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
     path('account/profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
     path('accounts/profile/', profile, name='profile'),
     path('accounts/login/', BBLoginView.as_view(), name='login'),
+    path('<int:pk>/', by_rubric, name='by_rubric'),
     path('<str:page>/', other_page, name='other'),
     path('', index, name='index')
 ]
