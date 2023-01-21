@@ -110,7 +110,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         logout(request)
         messages.add_message(request, messages.SUCCESS, 'Пользователь удален')
-        return super().post(request, *args,**kwargs)
+        return super().post(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         if not queryset:

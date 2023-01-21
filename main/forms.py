@@ -53,7 +53,7 @@ class RegisterUserForm(forms.ModelForm):
 
 class SubRubricForm(forms.ModelForm):
     super_rubric = forms.ModelChoiceField(queryset=SuperRubric.objects.all(), empty_label=None,
-                                          label='Надрубрика', required=True)
+                                          label='Раздел', required=True)
 
     class Meta:
         model = SubRubric
