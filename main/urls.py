@@ -6,7 +6,7 @@ from django.urls import path
 
 from .views import BBPasswordChangeView
 from .views import BBLoginView
-from .views import BBLogoutView
+from .views import BBLogoutView, detail
 from .views import index
 from .views import profile
 from .views import RegisterUserView, RegisterDoneView
@@ -22,6 +22,7 @@ urlpatterns = [
     path('account/profile/change/', ChangeUserInfoView.as_view(), name='profile_change'),
     path('accounts/profile/', profile, name='profile'),
     path('accounts/login/', BBLoginView.as_view(), name='login'),
+    path('<int:rubric_pk>/<int:pk>/', detail, name='detail'),
     path('<int:pk>/', by_rubric, name='by_rubric'),
     path('<str:page>/', other_page, name='other'),
     path('', index, name='index')
