@@ -7,6 +7,19 @@ AUTH_USER_MODEL = 'main.AdvUser'
 
 SECRET_KEY = 'django-insecure-y!%ad$1%6@q_$%bw-v-uq@7)ywe6+fji&2ubf6)o-1x908di-l'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+THUMBNAIL_ALIASES = {
+    '':{
+        'default': {
+            'size': (96, 96),
+            'crop': 'scale',
+        }
+    }
+}
+THUMBNAIL_BASEDIR = 'thumbnails'
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -23,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'bootstrap4',
+    'django_cleanup',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
