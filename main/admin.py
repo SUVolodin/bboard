@@ -11,6 +11,8 @@ def send_activation_notifications(modeladmin, request, queryset):
         if not rec.is_activated:
             send_activation_notification(rec)
     modeladmin.message_user(request, 'Письма с требованиями отправлены')
+
+
 send_activation_notifications.short_description = 'Отправка писем с требованием активации'
 
 

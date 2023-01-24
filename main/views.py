@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.core.paginator import Paginator
@@ -19,13 +19,15 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
 
-from .forms import ChangeUserInfoForm, RegisterUserForm, SearchForm
-from .models import AdvUser,Bb, SubRubric
+from .forms import AIFormSet, BbForm, ChangeUserInfoForm, RegisterUserForm, SearchForm
+from .models import AdvUser, Bb, SubRubric
 from .utilities import singer
 
 
 def index(request):
-    return render(request, 'main/index.html')
+    bbs = Bb.objects.filter(is_active=True)[:10]
+    context = {'bbs': bbs}
+    return render(request, 'main/index.html', context)
 
 
 def other_page(request, page: str):
@@ -43,7 +45,9 @@ class BBLoginView(LoginView):
 
 @login_required
 def profile(request):
-    return render(request, 'main/profile.html')
+    bbs = Bb.objects.filter(author=request.user.pk)
+    context = {'bbs': bbs}
+    return render(request, 'main/profile.html', context)
 
 
 class BBLogoutView(LoginRequiredMixin, LogoutView):
@@ -145,3 +149,67 @@ def detail(request, rubric_pk, pk):
     ais = bb.additionalimage_set.all()
     context = {'bb': bb, 'ais': ais}
     return render(request, 'main/detail.html', context)
+
+
+def profile_bb_detail(request, pk):
+    bb = get_object_or_404(Bb, pk=pk)
+    bbs = Bb.objects.filter(is_active=True, rubric=pk)
+    ais = bb.additionalimage_set.all()
+    context = {'bb': bb, 'ais': ais, 'bbs': bbs}
+    return render(request, 'main/profile_bb_detail.html', context)
+
+
+@login_required
+def profile_bb_add(request):
+    global formset
+    if request.method == 'POST':
+        form = BbForm(request.POST, request.FILES)
+        if form.is_valid():
+            bb = form.save()
+            formset = AIFormSet(request.POST, request.FILES, instance=bb)
+            if formset.is_valid():
+                formset.save()
+                messages.add_message(request, messages.SUCCESS,
+                                     'Объявление добавлено')
+                return redirect('main:profile')
+    else:
+        form = BbForm(initial={'author': request.user.pk})
+        formset = AIFormSet()
+    context = {'form': form, 'formset': formset}
+    return render(request, 'main/profile_bb_add.html', context)
+
+
+@login_required
+def profile_bb_change(request, pk):
+    global formset
+    bb = get_object_or_404(Bb, pk=pk)
+    if request.method == 'POST':
+        form = BbForm(request.POST, request.FILES, instance=bb)
+        if form.is_valid():
+            bb = form.save()
+            formset = AIFormSet(request.POST, request.FILES, instance=bb)
+            if formset.is_valid():
+                formset.save()
+                messages.add_message(request, messages.SUCCESS,
+                                     'Объявление исправлено')
+                return redirect('main:profile')
+    else:
+        form = BbForm(instance=bb)
+        formset = AIFormSet(instance=bb)
+    context = {'form': form, 'formset': formset}
+    return render(request, 'main/profile_bb_change.html', context)
+
+
+@login_required
+def profile_bb_delete(request, pk):
+    global formset
+    bb = get_object_or_404(Bb, pk=pk)
+    if request.method == 'POST':
+        bb.delete()
+        messages.add_message(request, messages.SUCCESS,
+                             'Объявление удалено')
+        return redirect('main:profile')
+    else:
+        context = {'bb': bb}
+        return render(request, 'main/profile_bb_delete.html', context)
+
