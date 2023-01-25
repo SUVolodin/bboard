@@ -1,10 +1,11 @@
+from captcha.fields import CharField
 from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 
 from .apps import user_registered
-from .models import AdditionalImage, AdvUser, Bb, SuperRubric, SubRubric
+from .models import AdditionalImage, AdvUser, Bb, Comment, SuperRubric, SubRubric
 
 
 class ChangeUserInfoForm(forms.ModelForm):
@@ -73,3 +74,19 @@ class BbForm(forms.ModelForm):
 
 
 AIFormSet = inlineformset_factory(Bb, AdditionalImage, fields='__all__')
+
+
+class UserCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ('is_active',)
+        widgets = {'bb': forms.HiddenInput}
+
+
+class GuestCommentForm(forms.ModelForm):
+    captcha = CharField(label='Введите текст с картинки', error_messages={'invalid': 'Неправильный текст'})
+
+    class Meta:
+        model = Comment
+        exclude = ('is_active',)
+        widget = {'bb': forms.HiddenInput}
