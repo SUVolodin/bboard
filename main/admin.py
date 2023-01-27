@@ -3,7 +3,7 @@ import datetime
 
 from .forms import SubRubricForm
 from .models import AdditionalImage, AdvUser, Bb, Comment, SuperRubric, SubRubric
-from .utilities import send_activation_notification
+from .utils import send_activation_notification
 
 
 def send_activation_notifications(modeladmin, request, queryset):

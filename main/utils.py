@@ -1,7 +1,10 @@
-from datetime import datetime
-from django.template.loader import render_to_string
-from django.core.signing import Signer
 from os.path import splitext
+
+
+from datetime import datetime
+from django.core.signing import Signer
+from django.template.loader import render_to_string
+
 
 from bboard.settings import ALLOWED_HOSTS
 
@@ -10,7 +13,7 @@ singer = Signer()
 
 def send_activation_notification(user):
     if ALLOWED_HOSTS:
-        host = 'http://' + ALLOWED_HOSTS[0]
+        host = f'http://{ALLOWED_HOSTS[0]}'
     else:
         host = 'http://localhost:8000'
     context = {'user': user, 'host': host, 'sing': singer.sign(user.username)}
@@ -25,7 +28,7 @@ def get_timestamp_path(instance, filename):
 
 def send_new_comment_notification(comment):
     if ALLOWED_HOSTS:
-        host = 'http://' + ALLOWED_HOSTS[0]
+        host = f'http://{ALLOWED_HOSTS[0]}'
     else:
         host = 'http://localhost:8000'
     author = comment.bb.author

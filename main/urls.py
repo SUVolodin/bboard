@@ -1,15 +1,10 @@
-from .views import DeleteUserView
-from .views import ChangeUserInfoView
-from .views import other_page
-from .views import user_activate, by_rubric
 from django.urls import path
 
-from .views import BBPasswordChangeView
-from .views import BBLoginView
-from .views import BBLogoutView, detail
-from .views import index
-from .views import profile, profile_bb_add, profile_bb_detail, profile_bb_change, profile_bb_delete
-from .views import RegisterUserView, RegisterDoneView
+
+from .views import BBLoginView, BBLogoutView, BBPasswordChangeView, by_rubric, ChangeUserInfoView, DeleteUserView,\
+    detail, index, other_page, profile, profile_bb_add, profile_bb_change, profile_bb_delete, profile_bb_detail, \
+    RegisterDoneView, RegisterUserView, user_activate
+
 
 app_name = 'main'
 urlpatterns = [
@@ -29,5 +24,5 @@ urlpatterns = [
     path('<int:rubric_pk>/<int:pk>/', detail, name='detail'),
     path('<int:pk>/', by_rubric, name='by_rubric'),
     path('<str:page>/', other_page, name='other'),
-    path('', index, name='index')
+    path('', index, name='index'),
 ]

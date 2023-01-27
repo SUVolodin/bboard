@@ -1,27 +1,25 @@
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
-from django.template import TemplateDoesNotExist
-from django.template.loader import get_template
-from django.core.paginator import Paginator
-from django.core.signing import BadSignature
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import LogoutView
-from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.paginator import Paginator
+from django.core.signing import BadSignature
 from django.db.models import Q
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
-from django.views.generic.base import TemplateView
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
 from django.urls import reverse_lazy
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
 
-from .forms import AIFormSet, BbForm, ChangeUserInfoForm, GuestCommentForm, RegisterUserForm, SearchForm, UserCommentForm
+from .forms import AIFormSet, BbForm, ChangeUserInfoForm, GuestCommentForm,\
+    RegisterUserForm, SearchForm, UserCommentForm
 from .models import AdvUser, Bb, Comment, SubRubric
-from .utilities import singer
+from .utils import singer
 
 
 def index(request):
@@ -130,7 +128,7 @@ def by_rubric(request, pk):
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         q = Q(title__icontains=keyword) | Q(content__icontains=keyword)
-        bbs =bbs.filter(q)
+        bbs = bbs.filter(q)
     else:
         keyword = ''
     form = SearchForm(initial={'keyword': keyword})
